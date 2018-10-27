@@ -20,7 +20,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
  *
  */
 @RestController
-@RequestMapping(value = "/insurance")
+@RequestMapping(value = "/insurances")
 public class InsuranceController {
 
     private InsuranceDAO insuranceDAO;
