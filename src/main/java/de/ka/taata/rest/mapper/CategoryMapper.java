@@ -18,7 +18,7 @@ public class CategoryMapper implements ResourceAssembler<Category, Resource<Cate
     public Resource<Category> toResource(Category category) {
         Resource<Category> resource = new Resource<>(category);
         resource.add(linkTo(CategoryController.class).slash(category.getId()).withSelfRel());
-        resource.add(linkTo(CategoryController.class).withRel("recipes"));
+        resource.add(linkTo(CategoryController.class).withRel("categories"));
         return resource;
     }
 
