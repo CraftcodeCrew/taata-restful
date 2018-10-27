@@ -2,8 +2,12 @@ package de.ka.taata.rest;
 
 import de.ka.taata.persistence.Insurable;
 import de.ka.taata.persistence.InsurableDAO;
+import de.ka.taata.persistence.Insurance;
+import de.ka.taata.persistence.InsuranceDAO;
 import de.ka.taata.rest.mapper.InsurableMapper;
 import de.ka.taata.rest.misc.InsurableNotFoundException;
+import de.ka.taata.rest.misc.InsuranceNotFoundException;
+import de.ka.taata.rest.model.InsurableCreate;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +30,17 @@ public class InsurableController {
     private InsurableDAO insurableDAO;
     private InsurableMapper insurableMapper;
 
+    private InsuranceDAO insuranceDAO;
+
     //--------------------------------------
     // Constructors
     //--------------------------------------
 
-    public InsurableController(InsurableDAO insurableDAO, InsurableMapper insurableMapper) {
+    public InsurableController(InsurableDAO insurableDAO, InsurableMapper insurableMapper,
+                               InsuranceDAO insuranceDAO) {
         this.insurableDAO = insurableDAO;
         this.insurableMapper = insurableMapper;
+        this.insuranceDAO = insuranceDAO;
     }
 
     //--------------------------------------
@@ -48,7 +56,17 @@ public class InsurableController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Insurable insurable) throws URISyntaxException {
+    public ResponseEntity<?> create(@RequestBody InsurableCreate insurableCreate)
+            throws URISyntaxException, InsuranceNotFoundException {
+        Insurable insurable = new Insurable();
+        insurable.setTitle(insurableCreate.getTitle());
+        insurable.setDescription(insurableCreate.getDescription());
+        insurable.setImageId(insurableCreate.getImageId());
+        insurable.setProbability(insurableCreate.getProbability());
+
+        Insurance insurance = insuranceDAO.findById(insurableCreate.getInsuranceId())
+                .orElseThrow(() -> new InsuranceNotFoundException(insurableCreate.getInsuranceId()));
+        insurable.setInsurance(insurance);
         Resource<Insurable> resource = insurableMapper.toResource(insurableDAO.save(insurable));
         return ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
