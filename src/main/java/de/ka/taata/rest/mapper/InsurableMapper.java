@@ -5,12 +5,14 @@ import de.ka.taata.rest.CategoryController;
 import de.ka.taata.rest.InsurableController;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceAssembler;
+import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  *
  */
+@Component
 public class InsurableMapper implements ResourceAssembler<Insurable, Resource<Insurable>> {
 
     @Override
