@@ -43,4 +43,12 @@ public class Insurable {
     // Methods
     //--------------------------------------
 
+    public void updateFrom(Insurable newInsurable) {
+        title = newInsurable.title;
+        description = newInsurable.description;
+        imageId = newInsurable.imageId;
+        isInsured = newInsurable.isInsured;
+        probability = newInsurable.probability;
+    }
+
 }
