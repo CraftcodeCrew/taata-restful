@@ -48,11 +48,14 @@ public class InsuranceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Insurance insurance) throws URISyntaxException {
+    public Insurance create(@RequestBody Insurance insurance) {
+        return insuranceDAO.save(insurance);
+        /*
         Resource<Insurance> resource = insuranceMapper.toResource(insuranceDAO.save(insurance));
         return ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
                 .body(resource);
+        */
     }
 
     @GetMapping("/{id}")
