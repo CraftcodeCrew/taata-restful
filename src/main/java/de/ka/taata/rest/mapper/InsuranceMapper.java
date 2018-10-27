@@ -18,7 +18,7 @@ public class InsuranceMapper implements ResourceAssembler<Insurance, Resource<In
     public Resource<Insurance> toResource(Insurance insurance) {
         Resource<Insurance> resource = new Resource<>(insurance);
         resource.add(linkTo(CategoryController.class).slash(insurance.getId()).withSelfRel());
-        resource.add(linkTo(CategoryController.class).withRel("insurance"));
+        resource.add(linkTo(CategoryController.class).withRel("insurances"));
         return resource;
     }
 
