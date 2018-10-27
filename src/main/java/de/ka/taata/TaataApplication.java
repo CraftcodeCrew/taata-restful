@@ -9,4 +9,5 @@ public class TaataApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TaataApplication.class, args);
 	}
+
 }
