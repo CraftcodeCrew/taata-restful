@@ -1,9 +1,9 @@
 package de.ka.taata.rest;
 
-import de.ka.taata.persistence.Category;
-import de.ka.taata.persistence.CategoryDAO;
+import de.ka.taata.persistence.*;
 import de.ka.taata.rest.mapper.CategoryMapper;
 import de.ka.taata.rest.misc.CategoryNotFoundException;
+import de.ka.taata.rest.misc.InsurableNotFoundException;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -82,6 +82,26 @@ public class CategoryController {
         if (categoryDAO.existsById(id))
             categoryDAO.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{category}/insure/{insurable}")
+    public Resource<Category> insure(
+            @PathVariable(name = "category") long categoryId,
+            @PathVariable(name = "insurable") long insurableId)
+            throws Exception {
+        Insurable insurable = insurableDAO.findById(insurableId)
+                .orElseThrow(() -> new InsurableNotFoundException(insurableId));
+        Category category = categoryDAO.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        if (!category.getInsurables().contains(insurable))
+            category.addInsurable(insurable);
+        try {
+            return categoryMapper.toResource(categoryDAO.save(category));
+        } catch (Exception e) {
+            throw new Exception(String.format(
+                    "Insurable (%s, %s) already belongs to an another category",
+                    insurable.getTitle(), insurable.getId()));
+        }
     }
 
 }
