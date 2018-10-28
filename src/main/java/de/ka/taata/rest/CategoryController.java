@@ -26,13 +26,98 @@ public class CategoryController {
     private CategoryDAO categoryDAO;
     private CategoryMapper categoryMapper;
 
+    private InsuranceDAO insuranceDAO;
+    private InsurableDAO insurableDAO;
+
     //--------------------------------------
     // Constructors
     //--------------------------------------
 
-    public CategoryController(CategoryDAO categoryDAO, CategoryMapper categoryMapper) {
+    public CategoryController(CategoryDAO categoryDAO, CategoryMapper categoryMapper,
+                              InsuranceDAO insuranceDAO, InsurableDAO insurableDAO) {
         this.categoryDAO = categoryDAO;
         this.categoryMapper = categoryMapper;
+        this.insuranceDAO = insuranceDAO;
+        this.insurableDAO = insurableDAO;
+
+        String loremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam";
+
+        Insurance liabilityInsurance = insuranceDAO.save(new Insurance("Liability insurance", 14));
+        Insurance homeInsurance = insuranceDAO.save(new Insurance("Home content insurance", 14));
+        Insurance healthInsurance = insuranceDAO.save(new Insurance("Health insurance", 11));
+        Insurance incomeInsurance = insuranceDAO.save(new Insurance("Income protection", 8));
+        Insurance lifeInsurance = insuranceDAO.save(new Insurance("Life assurance", 5));
+        Insurance carInsurance = insuranceDAO.save(new Insurance("Comprehensive insurance", 6));
+        Insurance carPartialInsurance = insuranceDAO.save(new Insurance("Partial coverage insurance", 13));
+
+        Insurance mobilePhoneInsurance = insuranceDAO.save(new Insurance("Mobile phone insurance", 5));
+        Insurance guitarInsurance = insuranceDAO.save(new Insurance("Guitar insurance", 5));
+        Insurance laptopInsurance = insuranceDAO.save(new Insurance("Laptop insurance", 5));
+        Insurance voiceInsurance = insuranceDAO.save(new Insurance("Voice insurance", 6));
+        Insurance bikeInsurance = insuranceDAO.save(new Insurance("Bike insurance", 4));
+        Insurance eyesInsurance = insuranceDAO.saveAndFlush(new Insurance("Eyes insurance", 7));
+
+        Insurable mobilePhoneInsurable = new Insurable("Mobile phone", loremIpsum);
+        mobilePhoneInsurable.setImageId("mobile_alt_solid");
+        Insurable guitarInsurable = new Insurable("Guitar", loremIpsum);
+        guitarInsurable.setImageId("music_solid");
+        Insurable laptopInsurable = new Insurable("Laptop", loremIpsum);
+        laptopInsurable.setImageId("laptop_solid");
+        Insurable voiceInsurable = new Insurable("Voice", loremIpsum);
+        voiceInsurable.setImageId("microphone_solid");
+        Insurable bikeInsurable = new Insurable("Bike", loremIpsum);
+        bikeInsurable.setImageId("running_solid");
+        Insurable eyesInsurable = new Insurable("Eyes", loremIpsum);
+        eyesInsurable.setImageId("eye_solid");
+
+        mobilePhoneInsurable.setInsurance(mobilePhoneInsurance);
+        guitarInsurable.setInsurance(guitarInsurance);
+        laptopInsurable.setInsurance(laptopInsurance);
+        voiceInsurable.setInsurance(voiceInsurance);
+        bikeInsurable.setInsurance(bikeInsurance);
+        eyesInsurable.setInsurance(eyesInsurance);
+
+        insurableDAO.save(mobilePhoneInsurable);
+        insurableDAO.save(guitarInsurable);
+        insurableDAO.save(laptopInsurable);
+        insurableDAO.save(voiceInsurable);
+        insurableDAO.save(bikeInsurable);
+        insurableDAO.saveAndFlush(eyesInsurable);
+
+        Category belongings = new Category("Belongings", loremIpsum);
+        belongings.setImageId("box_open_solid");
+        belongings.addInsurable(mobilePhoneInsurable);
+        belongings.addInsurable(guitarInsurable);
+        belongings.addInsurable(laptopInsurable);
+        belongings.addInsurable(bikeInsurable);
+
+        Category accidents = new Category("Accidents", loremIpsum);
+        accidents.setImageId("car_crash_solid");
+
+        Category activities = new Category("Activities", loremIpsum);
+        activities.setImageId("bicycle_solid");
+
+        Category catastrophes = new Category("Catastrophes", loremIpsum);
+        catastrophes.setImageId("fire_solid");
+
+        Category law = new Category("Law", loremIpsum);
+        law.setImageId("gavel_solid");
+
+        Category health = new Category("Health", loremIpsum);
+        health.setImageId("heartbeat_solid");
+        health.addInsurable(voiceInsurable);
+        health.addInsurable(eyesInsurable);
+
+        Category abilities = new Category("Abilities", loremIpsum);
+        abilities.setImageId("toolbox_solid");
+
+        categoryDAO.save(belongings);
+        categoryDAO.save(accidents);
+        categoryDAO.save(activities);
+        categoryDAO.save(catastrophes);
+        categoryDAO.save(law);
+        categoryDAO.save(health);
+        categoryDAO.saveAndFlush(abilities);
     }
 
     //--------------------------------------
